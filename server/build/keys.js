@@ -4,7 +4,7 @@ exports.default = {
     database: {
         host: 'localhost',
         user: 'root',
-        password: 'administrador',
+        password: 'password',
         database: 'TANQUE'
         //se puede poner el port
     }

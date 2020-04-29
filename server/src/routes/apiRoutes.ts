@@ -10,18 +10,13 @@ class ApiRoutes{
     }
 
     config():void {
-        this.router.get('/getRepeticiones', apiController.getRepeticiones);
-        this.router.post('/newRepeticion', apiController.newRepeticion);
-        this.router.post('/newRutina', apiController.newRutina);
-        this.router.post('/newPausa', apiController.newPausa);
+        this.router.post('/newRecorrido', apiController.newRecorrido);
+        this.router.get('/getRecorridos', apiController.getRecorridos);
+        this.router.post('/newAccion', apiController.newAccion);
         this.router.get('/getAccion', apiController.getAccion);
-        this.router.get('/getCorrectas', apiController.getCorrectas);
-        this.router.get('/getIncorrectas', apiController.getIncorrectas);
-        this.router.get('/getEficienciaEjercicio', apiController.getEficienciaEjercicio);
-        this.router.get('/getEficienciaRutina', apiController.getEficienciaRutina);
-        this.router.get('/getRelacionRep', apiController.getRelacionRep);
-        this.router.get('/getPausa', apiController.getPausa);
-        this.router.get('/getRepeticionesTipo', apiController.getRepeticionesTipo);
+        this.router.post('/newLog', apiController.newLog);
+        this.router.get('/getCola', apiController.getCola);
+        this.router.get('/getLog', apiController.getLog);
     }
 
 }

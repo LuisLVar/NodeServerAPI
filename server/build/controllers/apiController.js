@@ -27,6 +27,12 @@ class ApiController {
             res.json(recorridos);
         });
     }
+    getAcciones(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const acciones = yield database_1.default.query('SELECT * FROM Accion');
+            res.json(acciones);
+        });
+    }
     getCola(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             res.json(colaAcciones);
@@ -41,10 +47,10 @@ class ApiController {
     }
     newRecorrido(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query(`INSERT INTO Recorrido values(0, 0, 0)`);
+            yield database_1.default.query(`INSERT INTO Recorrido values(0, 0, 0, 0, sysdate())`);
             let noRecorrido = yield database_1.default.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
             let modo = req.body.accion;
-            yield database_1.default.query(`INSERT INTO Accion VALUES(0, ?)`, [modo]);
+            yield database_1.default.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
             recorridoActual = noRecorrido[0].recorrido;
             let noAccion = yield database_1.default.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
             accionActual = noAccion[0].accion;
@@ -55,7 +61,7 @@ class ApiController {
     newAccion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let modo = req.body.accion;
-            yield database_1.default.query(`INSERT INTO Accion VALUES(0, ?)`, [modo]);
+            yield database_1.default.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
             let noRecorrido = yield database_1.default.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
             recorridoActual = noRecorrido[0].recorrido;
             let noAccion = yield database_1.default.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
@@ -81,6 +87,27 @@ class ApiController {
             let disparos = req.body.disparos;
             yield database_1.default.query(`INSERT INTO Log VALUES(0, sysdate(), ?, ?, ?, ?, ?, ?, ?, ?)`, [tiempo, objetos, velocidad, distancia, decision, disparos, recorrido, accion]);
             res.json({ estado: true });
+        });
+    }
+    //REPORTES
+    dataRecorrido(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
+        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r`);
+            res.json(data);
+        });
+    }
+    dataLog(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield database_1.default.query(`SELECT r.recorrido, t.nombre as accion, l.tiempo, l.objetos, l.velocidad, l.distancia,
+        l.decision, l.disparos, date_format(l.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(l.fecha, '%d-%m-%Y') as fecha2 from Log l
+       INNER JOIN Recorrido r
+       on r.recorrido = l.recorrido_Recorrido
+       INNER JOIN Accion a
+       on a.accion = l.accion_Accion
+       INNER JOIN Tipo_Accion t
+       on t.tipo = a.tipo_Tipo_Accion`);
+            res.json(data);
         });
     }
 }

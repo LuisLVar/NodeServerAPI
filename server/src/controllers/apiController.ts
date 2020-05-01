@@ -17,6 +17,11 @@ class ApiController {
         res.json(recorridos);
     }
 
+    public async getAcciones(req: Request, res: Response) {
+        const acciones = await pool.query('SELECT * FROM Accion');
+        res.json(acciones);
+    }
+
     public async getCola(req: Request, res: Response) {
         res.json(colaAcciones);
     }
@@ -28,10 +33,10 @@ class ApiController {
     }
 
     public async newRecorrido(req: Request, res: Response) {
-        await pool.query(`INSERT INTO Recorrido values(0, 0, 0)`);
+        await pool.query(`INSERT INTO Recorrido values(0, 0, 0, 0, sysdate())`);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         let modo = req.body.accion;
-        await pool.query(`INSERT INTO Accion VALUES(0, ?)`, [modo]);
+        await pool.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
         recorridoActual = noRecorrido[0].recorrido;
         let noAccion = await pool.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
         accionActual = noAccion[0].accion;
@@ -41,7 +46,7 @@ class ApiController {
 
     public async newAccion(req: Request, res: Response) {
         let modo = req.body.accion;
-        await pool.query(`INSERT INTO Accion VALUES(0, ?)`, [modo]);
+        await pool.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         recorridoActual = noRecorrido[0].recorrido;
         let noAccion = await pool.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
@@ -65,6 +70,26 @@ class ApiController {
         let disparos = req.body.disparos;
         await pool.query(`INSERT INTO Log VALUES(0, sysdate(), ?, ?, ?, ?, ?, ?, ?, ?)`, [tiempo, objetos, velocidad, distancia, decision, disparos, recorrido, accion]);
         res.json({estado: true});
+    }
+
+    //REPORTES
+
+    public async dataRecorrido(req: Request, res: Response) {
+        const data = await pool.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
+        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r`);
+        res.json(data);
+    }
+
+    public async dataLog(req: Request, res: Response) {
+        const data = await pool.query(`SELECT r.recorrido, t.nombre as accion, l.tiempo, l.objetos, l.velocidad, l.distancia,
+        l.decision, l.disparos, date_format(l.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(l.fecha, '%d-%m-%Y') as fecha2 from Log l
+       INNER JOIN Recorrido r
+       on r.recorrido = l.recorrido_Recorrido
+       INNER JOIN Accion a
+       on a.accion = l.accion_Accion
+       INNER JOIN Tipo_Accion t
+       on t.tipo = a.tipo_Tipo_Accion`);
+        res.json(data);
     }
 }
 

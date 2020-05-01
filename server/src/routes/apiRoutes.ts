@@ -17,6 +17,10 @@ class ApiRoutes{
         this.router.post('/newLog', apiController.newLog);
         this.router.get('/getCola', apiController.getCola);
         this.router.get('/getLog', apiController.getLog);
+        this.router.get('/getAcciones', apiController.getAcciones);
+        // Reportes
+        this.router.get('/dataRecorrido', apiController.dataRecorrido);
+        this.router.get('/dataLog', apiController.dataLog);
     }
 
 }

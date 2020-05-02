@@ -85,7 +85,17 @@ class ApiController {
             let recorrido = req.body.recorrido;
             let objetos = req.body.objetos;
             let disparos = req.body.disparos;
+            let fin = req.body.fin;
             yield database_1.default.query(`INSERT INTO Log VALUES(0, sysdate(), ?, ?, ?, ?, ?, ?, ?, ?)`, [tiempo, objetos, velocidad, distancia, decision, disparos, recorrido, accion]);
+            let modo = yield database_1.default.query(`SELECT tipo_Tipo_Accion as modo from Accion where accion = ?`, [accion]);
+            console.log(modo);
+            if (modo[0].modo == 2 && fin == 1) {
+                yield database_1.default.query(`UPDATE Recorrido SET
+            velocidad = ?,
+            distancia = ?,
+            tiempo = ?
+            WHERE recorrido = ?`, [velocidad, distancia, tiempo, recorrido]);
+            }
             res.json({ estado: true });
         });
     }

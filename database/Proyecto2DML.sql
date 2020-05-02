@@ -1,10 +1,19 @@
 INSERT INTO Recorrido values(0, 0, 0);
 SELECT * FROM Recorrido;
 
+UPDATE Recorrido SET
+velocidad = 10,
+distancia = 13,
+tiempo = 15
+WHERE recorrido = 2;
+
+
+
 INSERT INTO Tipo_Accion VALUES(0, 'Derribar');
 INSERT INTO Tipo_Accion VALUES(0, 'Detener');
 INSERT INTO Tipo_Accion VALUES(0, 'Evitar');
 INSERT INTO Tipo_Accion VALUES(0, 'Atacar');
+INSERT INTO Tipo_Accion VALUES(0, 'Disparo');
 
 SELECT * FROM Tipo_Accion;
 
@@ -22,7 +31,8 @@ SELECT log, date_format(fecha, '%d-%m-%Y %H:%i:%s') as fecha, tiempo,
         
         
 SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
- date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r;
+ date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
+ order by recorrido asc;
 
 
 
@@ -34,14 +44,17 @@ on r.recorrido = l.recorrido_Recorrido
 INNER JOIN Accion a
 on a.accion = l.accion_Accion
 INNER JOIN Tipo_Accion t
-on t.tipo = a.tipo_Tipo_Accion;
+on t.tipo = a.tipo_Tipo_Accion
+ORDER BY fecha asc;
 
 
 SELECT * FROM Log;
 SELECT * FROM Accion;
-        
-        
-        
-        
-        
+
+
+SELECT * FROM Log;
+
+
+SELECT tipo_Tipo_Accion as modo from Accion where accion = 17;
+      
         

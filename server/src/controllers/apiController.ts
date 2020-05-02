@@ -86,7 +86,8 @@ class ApiController {
 
     public async dataRecorrido(req: Request, res: Response) {
         const data = await pool.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
-        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r`);
+        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
+        order by recorrido asc`);
         res.json(data);
     }
 
@@ -98,7 +99,8 @@ class ApiController {
        INNER JOIN Accion a
        on a.accion = l.accion_Accion
        INNER JOIN Tipo_Accion t
-       on t.tipo = a.tipo_Tipo_Accion`);
+       on t.tipo = a.tipo_Tipo_Accion
+       ORDER BY fecha asc`);
         res.json(data);
     }
 }

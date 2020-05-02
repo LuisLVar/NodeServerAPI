@@ -47,6 +47,7 @@ class ApiController {
     }
     newRecorrido(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             yield database_1.default.query(`INSERT INTO Recorrido values(0, 0, 0, 0, sysdate())`);
             let noRecorrido = yield database_1.default.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
             let modo = req.body.accion;
@@ -60,6 +61,7 @@ class ApiController {
     }
     newAccion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             let modo = req.body.accion;
             yield database_1.default.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
             let noRecorrido = yield database_1.default.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
@@ -77,6 +79,7 @@ class ApiController {
     }
     newLog(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             let tiempo = req.body.tiempo;
             let accion = req.body.accion;
             let distancia = req.body.distancia;
@@ -103,7 +106,8 @@ class ApiController {
     dataRecorrido(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
-        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r`);
+        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
+        order by recorrido asc`);
             res.json(data);
         });
     }
@@ -116,7 +120,8 @@ class ApiController {
        INNER JOIN Accion a
        on a.accion = l.accion_Accion
        INNER JOIN Tipo_Accion t
-       on t.tipo = a.tipo_Tipo_Accion`);
+       on t.tipo = a.tipo_Tipo_Accion
+       ORDER BY fecha asc`);
             res.json(data);
         });
     }

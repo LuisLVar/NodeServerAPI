@@ -33,6 +33,7 @@ class ApiController {
     }
 
     public async newRecorrido(req: Request, res: Response) {
+        console.log(req.body);
         await pool.query(`INSERT INTO Recorrido values(0, 0, 0, 0, sysdate())`);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         let modo = req.body.accion;
@@ -45,6 +46,7 @@ class ApiController {
     }
 
     public async newAccion(req: Request, res: Response) {
+        console.log(req.body);
         let modo = req.body.accion;
         await pool.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
@@ -60,6 +62,7 @@ class ApiController {
     }
 
     public async newLog(req: Request, res: Response) {
+        console.log(req.body);
         let tiempo = req.body.tiempo;
         let accion = req.body.accion;
         let distancia = req.body.distancia;

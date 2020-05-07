@@ -13,7 +13,7 @@ class ApiRoutes{
         this.router.post('/newRecorrido', apiController.newRecorrido);
         this.router.get('/getRecorridos', apiController.getRecorridos);
         this.router.post('/newAccion', apiController.newAccion);
-        this.router.get('/getAccion', apiController.getAccion);
+        this.router.get('/getRecorrido', apiController.getRecorrido);
         this.router.post('/newLog', apiController.newLog);
         this.router.get('/getCola', apiController.getCola);
         this.router.get('/getLog', apiController.getLog);

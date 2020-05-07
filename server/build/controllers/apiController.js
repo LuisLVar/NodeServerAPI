@@ -107,7 +107,7 @@ class ApiController {
     //REPORTES
     dataRecorrido(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo,
+            const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo, r.objDerribado, r.objEvitado, r.objEncontrado, 
         date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
         order by recorrido asc`);
             res.json(data);

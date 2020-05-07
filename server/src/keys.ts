@@ -1,11 +1,10 @@
-export default{//encargado de la configuracion de db
+export default {//encargado de la configuracion de db
 
-    database:{
+    database: {
         host: 'localhost',
         user: 'root',
         password: 'password',
         database: 'TANQUE'
         //se puede poner el port
     }
-
 }

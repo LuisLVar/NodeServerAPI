@@ -34,7 +34,16 @@ class ApiController {
 
     public async newRecorrido(req: Request, res: Response) {
         //console.log(req.body);
-        await pool.query(`INSERT INTO Recorrido values(0, 0, 0, 0, sysdate())`);
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth() +1;
+        var dia = d.getDate();
+        var hour = d.getHours();
+        var minutes = d.getMinutes();
+        var seconds = d.getSeconds();
+  
+        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+        await pool.query(`INSERT INTO Recorrido values(0, 0, 0, 0, ?, 0, 0, 0, 0)`, [fecha]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         //let modo = req.body.accion;
         //await pool.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
@@ -48,7 +57,18 @@ class ApiController {
     public async newAccion(req: Request, res: Response) {
         console.log(req.body);
         let modo = req.body.accion;
-        await pool.query(`INSERT INTO Accion VALUES(0, ?, sysdate())`, [modo]);
+
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth() +1;
+        var dia = d.getDate();
+        var hour = d.getHours();
+        var minutes = d.getMinutes();
+        var seconds = d.getSeconds();
+  
+        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+
+        await pool.query(`INSERT INTO Accion VALUES(0, ?, ?)`, [modo, fecha]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         recorridoActual = noRecorrido[0].recorrido;
         let noAccion = await pool.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
@@ -74,7 +94,18 @@ class ApiController {
         let objEncontrado = req.body.objEncontrado;
         let disparos = req.body.disparos;
         let fin = req.body.fin;
-        await pool.query(`INSERT INTO Log VALUES(0, sysdate(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [tiempo, objDerribado, objEvitado, objEncontrado, velocidad, distancia, decision, disparos, recorrido, accion]);
+
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth() +1;
+        var dia = d.getDate();
+        var hour = d.getHours();
+        var minutes = d.getMinutes();
+        var seconds = d.getSeconds();
+  
+        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+
+        await pool.query(`INSERT INTO Log VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fecha, tiempo, objDerribado, objEvitado, objEncontrado, velocidad, distancia, decision, disparos, recorrido, accion]);
         let modo = await pool.query(`SELECT tipo_Tipo_Accion as modo from Accion where accion = ?`, [accion]);
         console.log(modo);
         if(modo[0].modo == 2 && fin == 1){

@@ -18,7 +18,9 @@ class ApiRoutes {
         this.router.get('/getAcciones', apiController_1.apiController.getAcciones);
         // Reportes
         this.router.get('/dataRecorrido', apiController_1.apiController.dataRecorrido);
+        this.router.get('/dataRecorrido/:id', apiController_1.apiController.dataRecorridoOne);
         this.router.get('/dataLog', apiController_1.apiController.dataLog);
+        this.router.get('/dataLog/:id', apiController_1.apiController.dataLogOne);
     }
 }
 const apiRoutes = new ApiRoutes();

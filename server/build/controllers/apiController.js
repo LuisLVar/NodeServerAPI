@@ -109,7 +109,17 @@ class ApiController {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo, r.objDerribado, r.objEvitado, r.objEncontrado, r.tiempo_decision,
         date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
-        order by recorrido asc`);
+        order by recorrido desc`);
+            res.json(data);
+        });
+    }
+    dataRecorridoOne(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const data = yield database_1.default.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo, r.objDerribado, r.objEvitado, r.objEncontrado, r.tiempo_decision,
+        date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
+        WHERE r.recorrido = ?
+        order by recorrido desc`, [id]);
             res.json(data);
         });
     }
@@ -123,7 +133,23 @@ class ApiController {
        on a.accion = l.accion_Accion
        INNER JOIN Tipo_Accion t
        on t.tipo = a.tipo_Tipo_Accion
-       ORDER BY fecha asc`);
+       ORDER BY fecha desc`);
+            res.json(data);
+        });
+    }
+    dataLogOne(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const data = yield database_1.default.query(`SELECT r.recorrido, t.nombre as accion, l.tiempo, l.objDerribado, l.objEvitado, l.objEncontrado, l.velocidad, l.distancia,
+        l.decision, l.disparos, date_format(l.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(l.fecha, '%d-%m-%Y') as fecha2 from Log l
+       INNER JOIN Recorrido r
+       on r.recorrido = l.recorrido_Recorrido
+       INNER JOIN Accion a
+       on a.accion = l.accion_Accion
+       INNER JOIN Tipo_Accion t
+       on t.tipo = a.tipo_Tipo_Accion
+       WHERE r.recorrido = ?
+       ORDER BY fecha desc`, [id]);
             res.json(data);
         });
     }

@@ -20,7 +20,9 @@ class ApiRoutes{
         this.router.get('/getAcciones', apiController.getAcciones);
         // Reportes
         this.router.get('/dataRecorrido', apiController.dataRecorrido);
+        this.router.get('/dataRecorrido/:id', apiController.dataRecorridoOne);
         this.router.get('/dataLog', apiController.dataLog);
+        this.router.get('/dataLog/:id', apiController.dataLogOne);
     }
 
 }

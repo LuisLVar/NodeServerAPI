@@ -107,7 +107,7 @@ class ApiController {
 
         await pool.query(`INSERT INTO Log VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fecha, tiempo, objDerribado, objEvitado, objEncontrado, velocidad, distancia, decision, disparos, recorrido, accion]);
         let modo = await pool.query(`SELECT tipo_Tipo_Accion as modo from Accion where accion = ?`, [accion]);
-        let dec = await pool.query(`SELECT AVG(decision) FROM Log where recorrido_Recorrido = ? and decision != 0`, [recorrido]);
+        let dec = await pool.query(`SELECT AVG(decision) as decision FROM Log where recorrido_Recorrido = ? and decision != 0`, [recorrido]);
         
         console.log(modo);
         if (modo[0].modo == 2 && fin == 1) {
@@ -116,7 +116,7 @@ class ApiController {
             distancia = ?,
             tiempo = ?,
             tiempo_decision = ?
-            WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec, recorrido]);
+            WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec[0].decision, recorrido]);
         }
         res.json({ estado: true });
     }

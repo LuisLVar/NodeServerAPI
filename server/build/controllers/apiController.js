@@ -117,13 +117,15 @@ class ApiController {
             var fecha = year + "-" + month + "-" + dia + " " + hour + ":" + minutes + ":" + seconds;
             yield database_1.default.query(`INSERT INTO Log VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fecha, tiempo, objDerribado, objEvitado, objEncontrado, velocidad, distancia, decision, disparos, recorrido, accion]);
             let modo = yield database_1.default.query(`SELECT tipo_Tipo_Accion as modo from Accion where accion = ?`, [accion]);
+            let dec = yield database_1.default.query(`SELECT AVG(decision) FROM Log where recorrido_Recorrido = ? and decision != 0`, [recorrido]);
             console.log(modo);
             if (modo[0].modo == 2 && fin == 1) {
                 yield database_1.default.query(`UPDATE Recorrido SET
             velocidad = ?,
             distancia = ?,
-            tiempo = ?
-            WHERE recorrido = ?`, [velocidad, distancia, tiempo, recorrido]);
+            tiempo = ?,
+            decision = ?
+            WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec, recorrido]);
             }
             res.json({ estado: true });
         });

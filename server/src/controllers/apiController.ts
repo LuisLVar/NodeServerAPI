@@ -115,7 +115,7 @@ class ApiController {
             velocidad = ?,
             distancia = ?,
             tiempo = ?,
-            decision = ?
+            tiempo_decision = ?
             WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec, recorrido]);
         }
         res.json({ estado: true });

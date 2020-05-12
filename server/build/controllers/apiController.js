@@ -124,8 +124,11 @@ class ApiController {
             velocidad = ?,
             distancia = ?,
             tiempo = ?,
+            objDerribado = ?,
+            objEvitado = ?,
+            objEncontrado = ?,
             tiempo_decision = ?
-            WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec[0].decision, recorrido]);
+            WHERE recorrido = ?`, [velocidad, distancia, tiempo, objDerribado, objEvitado, objEncontrado, dec[0].decision, recorrido]);
             }
             res.json({ estado: true });
         });

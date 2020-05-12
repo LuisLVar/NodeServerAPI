@@ -36,13 +36,13 @@ class ApiController {
         //console.log(req.body);
         var d = new Date();
         var year = d.getFullYear();
-        var month = d.getMonth() +1;
+        var month = d.getMonth() + 1;
         var dia = d.getDate();
         var hour = d.getHours();
         var minutes = d.getMinutes();
         var seconds = d.getSeconds();
-  
-        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+
+        var fecha = year + "-" + month + "-" + dia + " " + hour + ":" + minutes + ":" + seconds;
         await pool.query(`INSERT INTO Recorrido values(0, 0, 0, 0, ?, 0, 0, 0, 0)`, [fecha]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
         //let modo = req.body.accion;
@@ -50,8 +50,8 @@ class ApiController {
         recorridoActual = noRecorrido[0].recorrido;
         //let noAccion = await pool.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
         //accionActual = noAccion[0].accion;
-        colaRecorridos.push({ recorrido: recorridoActual});
-        res.json({ estado: true, recorrido: recorridoActual});
+        colaRecorridos.push({ recorrido: recorridoActual });
+        res.json({ estado: true, recorrido: recorridoActual });
     }
 
     public async newAccion(req: Request, res: Response) {
@@ -60,13 +60,13 @@ class ApiController {
 
         var d = new Date();
         var year = d.getFullYear();
-        var month = d.getMonth() +1;
+        var month = d.getMonth() + 1;
         var dia = d.getDate();
         var hour = d.getHours();
         var minutes = d.getMinutes();
         var seconds = d.getSeconds();
-  
-        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+
+        var fecha = year + "-" + month + "-" + dia + " " + hour + ":" + minutes + ":" + seconds;
 
         await pool.query(`INSERT INTO Accion VALUES(0, ?, ?)`, [modo, fecha]);
         let noRecorrido = await pool.query(`SELECT recorrido from Recorrido ORDER BY recorrido desc LIMIT 1`);
@@ -74,7 +74,7 @@ class ApiController {
         let noAccion = await pool.query(`SELECT accion from Accion ORDER BY accion desc LIMIT 1`);
         accionActual = noAccion[0].accion;
         //colaRecorridos.push({ recorrido: recorridoActual, accion: accionActual, modo: modo});
-        res.json({ recorrido: recorridoActual, accion: accionActual, modo: modo});
+        res.json({ recorrido: recorridoActual, accion: accionActual, modo: modo });
     }
 
     public async getRecorrido(req: Request, res: Response) {
@@ -97,25 +97,28 @@ class ApiController {
 
         var d = new Date();
         var year = d.getFullYear();
-        var month = d.getMonth() +1;
+        var month = d.getMonth() + 1;
         var dia = d.getDate();
         var hour = d.getHours();
         var minutes = d.getMinutes();
         var seconds = d.getSeconds();
-  
-        var fecha = year+"-"+month+"-"+dia+" "+hour+":"+minutes+":"+seconds;
+
+        var fecha = year + "-" + month + "-" + dia + " " + hour + ":" + minutes + ":" + seconds;
 
         await pool.query(`INSERT INTO Log VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fecha, tiempo, objDerribado, objEvitado, objEncontrado, velocidad, distancia, decision, disparos, recorrido, accion]);
         let modo = await pool.query(`SELECT tipo_Tipo_Accion as modo from Accion where accion = ?`, [accion]);
+        let dec = await pool.query(`SELECT AVG(decision) FROM Log where recorrido_Recorrido = ? and decision != 0`, [recorrido]);
+        
         console.log(modo);
-        if(modo[0].modo == 2 && fin == 1){
+        if (modo[0].modo == 2 && fin == 1) {
             await pool.query(`UPDATE Recorrido SET
             velocidad = ?,
             distancia = ?,
-            tiempo = ?
-            WHERE recorrido = ?`, [velocidad, distancia, tiempo, recorrido]);
+            tiempo = ?,
+            decision = ?
+            WHERE recorrido = ?`, [velocidad, distancia, tiempo, dec, recorrido]);
         }
-        res.json({estado: true});
+        res.json({ estado: true });
     }
 
     //REPORTES
@@ -128,7 +131,7 @@ class ApiController {
     }
 
     public async dataRecorridoOne(req: Request, res: Response) {
-        const { id }= req.params;
+        const { id } = req.params;
         const data = await pool.query(`SELECT r.recorrido, r.velocidad, r.distancia, r.tiempo, r.objDerribado, r.objEvitado, r.objEncontrado, r.tiempo_decision,
         date_format(r.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(r.fecha, '%d-%m-%Y') as fecha2 from Recorrido r
         WHERE r.recorrido = ?
@@ -148,9 +151,9 @@ class ApiController {
        ORDER BY fecha desc`);
         res.json(data);
     }
-    
+
     public async dataLogOne(req: Request, res: Response) {
-        const { id }= req.params;
+        const { id } = req.params;
         const data = await pool.query(`SELECT r.recorrido, t.nombre as accion, l.tiempo, l.objDerribado, l.objEvitado, l.objEncontrado, l.velocidad, l.distancia,
         l.decision, l.disparos, date_format(l.fecha, '%d-%m-%Y %H:%i:%s') as fecha, date_format(l.fecha, '%d-%m-%Y') as fecha2 from Log l
        INNER JOIN Recorrido r
